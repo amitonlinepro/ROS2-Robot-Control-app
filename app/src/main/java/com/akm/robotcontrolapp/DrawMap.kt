@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import android.graphics.Color as AndroidColor
 
-
+//TODO : Needs update to manage large maps
 @Composable
 fun DrawMap(map: MapData?, pose: Pose2D?) {
     Log.d("DrawMap", "DrawMap called with map: ${map?.width}x${map?.height}")
