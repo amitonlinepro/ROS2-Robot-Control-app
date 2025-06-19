@@ -97,7 +97,6 @@ fun DrawMap(map: MapData?, pose: Pose2D?) {
                         strokeWidth = 3.dp.toPx()
                     )
 
-
                 } catch (e: Exception) {
                     Log.e("DrawMap", "Pose drawing error: ${e.message}")
                 }
