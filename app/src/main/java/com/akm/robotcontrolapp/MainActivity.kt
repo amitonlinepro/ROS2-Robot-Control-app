@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         val isConnected = mutableStateOf(false)
         val mapData = mutableStateOf<MapData?>(null)
         val robotPose = mutableStateOf<Pose2D?>(null)
+        val isRobotOnline = mutableStateOf(false)
 
 
         lifecycleScope.launch {
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                         }
                         webSocketManager.onMapUpdate = {
                             mapData.value = it
+                            isRobotOnline.value = true
                         }
                         webSocketManager.onPoseUpdate = {
                             robotPose.value = it

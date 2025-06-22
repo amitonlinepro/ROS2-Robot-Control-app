@@ -17,6 +17,11 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +51,18 @@ fun RobotControlScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("🤖 Robot Controller") },
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(id = R.drawable.vacuum_cleaner),
+                            contentDescription = "Robot Icon",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .padding(end = 8.dp)
+                        )
+                        Text("Robot Controller")
+                    }
+                },
                 actions = {
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
@@ -68,14 +84,27 @@ fun RobotControlScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .padding(16.dp),
+                    .padding(start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = if (isConnected.value) "🟢 Connected" else "🔴 Disconnected",
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 32.dp)
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = if (isConnected.value) "🟢 Server Connected" else "🔴 Server Disconnected",
+                        fontSize = 14.sp,
+                    )
+                    Text(
+                        text = if (map != null)
+                            "🧹 Robot Active"
+                        else
+                            "\uD83D\uDD52 Waiting for Robot",
+                        fontSize = 14.sp
+                    )
+                }
 
                 if (map != null && pose != null) {
                     BoxWithConstraints(
@@ -97,7 +126,17 @@ fun RobotControlScreen(
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.placeholder_map),
+                        contentDescription = "Map Placeholder",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
+
 
 
                 ControlButtons(onMove = onCommand)
