@@ -121,4 +121,16 @@ class WebSocketManager(
 
         webSocket?.close(1000, "Closed by app")
     }
+
+    fun sendNavigationGoal(x: Double, y: Double, theta: Double = 0.0) {
+        val message = JSONObject().apply {
+            put("type", "navigate_to_pose")
+            put("x", x)
+            put("y", y)
+            put("theta", theta)
+        }
+        webSocket?.send(message.toString())
+        Log.d("WebSocket", "Sent navigation goal: $message")
+    }
+
 }

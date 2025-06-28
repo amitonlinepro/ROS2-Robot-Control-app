@@ -59,7 +59,9 @@ class MainActivity : ComponentActivity() {
                         onCommand = { direction -> webSocketManager.sendCommand(direction) },
                         onSaveMap = { name, onResult -> saveMapFromApp(name, savedIp, onResult) },
                         onSettings = { currentScreen = "settings" },
-                        onViewMaps = { currentScreen = "maps" }
+                        onViewMaps = { currentScreen = "maps" },
+                        onMapTap = { x, y -> webSocketManager.sendNavigationGoal(x, y) }
+
                     )
                 }
 

@@ -14,10 +14,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+
 
 //TODO : Needs update to manage large maps
 @Composable
-fun DrawMap(map: MapData?, pose: Pose2D?) {
+fun DrawMap(
+    map: MapData?,
+    pose: Pose2D?,
+    onMapTap: ((Double, Double) -> Unit)? = null
+) {
     Log.d("DrawMap", "DrawMap called with map: ${map?.width}x${map?.height}")
     if (map == null) {
         Log.e("DrawMap", "Map is null, skipping draw.")
@@ -61,7 +68,19 @@ fun DrawMap(map: MapData?, pose: Pose2D?) {
         modifier = Modifier
     ) {
         Canvas(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        if (map != null) {
+                            val mapX = offset.x * map.width / size.width
+                            val mapY = offset.y * map.height / size.height
+                            val worldX = map.originX + (mapX * map.resolution)
+                            val worldY = map.originY + ((map.height - mapY) * map.resolution)
+                            onMapTap?.invoke(worldX.toDouble(), worldY.toDouble())
+                        }
+                    }
+                }
         ) {
             drawImage(
                 image = imageBitmap,
